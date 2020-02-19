@@ -34,5 +34,7 @@ private[avro] class SubjectNameStrategyAdapter(strategy: SubjectNameStrategy[Sch
 
   private def isValidSchema(schema: Schema) = !(schema == null || schema.getFullName == null)
 
-  private def strategyDoesNotDependOnSchema = isAdapteeType(classOf[TopicNameStrategy])
+  // Metis - TopicNameBase64Strategy is independent of schema.
+  private def strategyDoesNotDependOnSchema = isAdapteeType(classOf[TopicNameStrategy]) ||
+    isAdapteeType(classOf[TopicNameBase64Strategy])
 }

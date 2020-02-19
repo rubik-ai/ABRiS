@@ -16,6 +16,7 @@
 
 package za.co.absa.abris.avro.sql
 
+import ai.rubik.metis.commons.SchemaUtils
 import org.apache.avro.{Schema, SchemaBuilder}
 import org.apache.spark.sql.avro.SchemaConverters.toAvroType
 import org.apache.spark.sql.catalyst.expressions.Expression
@@ -89,8 +90,9 @@ object SchemaProvider {
       val schemaNamespace = namespace.getOrElse(DEFAULT_SCHEMA_NAMESPACE)
 
       val schema = toAvroType(expression.dataType, expression.nullable, schemaName, schemaNamespace)
-
-      (schema, wrapSchema(schema, schemaName, schemaNamespace))
+      // Metis - Massage schema in order to keep backward compatibility in place.
+      val massagedSchema = SchemaUtils.massageSchema(schema)
+      (massagedSchema, wrapSchema(massagedSchema, schemaName, schemaNamespace))
     })
   }
 

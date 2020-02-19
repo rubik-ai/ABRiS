@@ -49,10 +49,13 @@ object SchemaManager extends Logging {
   val PARAM_SCHEMA_NAME_FOR_RECORD_STRATEGY      = "schema.name"
   val PARAM_SCHEMA_NAMESPACE_FOR_RECORD_STRATEGY = "schema.namespace"
 
+  val PARAM_SCHEMA_REGISTRATION_DISABLED = "schema.registration.disabled"
+
   object SchemaStorageNamingStrategies extends Enumeration {
     val TOPIC_NAME        = "topic.name"
     val RECORD_NAME       = "record.name"
     val TOPIC_RECORD_NAME = "topic.record.name"
+    val TOPIC_NAME_BASE64 = "topic.name.base64"
   }
 
   private var schemaRegistryClient: SchemaRegistryClient = _

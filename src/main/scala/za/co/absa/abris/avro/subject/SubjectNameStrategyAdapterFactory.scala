@@ -27,11 +27,12 @@ private[avro] object SubjectNameStrategyAdapterFactory {
   def build(strategy: String): SubjectNameStrategyAdapter = {
 
     logger.info(s"Creating adapter for strategy: $strategy")
-
+    // Metis - Added TOPIC_NAME_BASE64
     strategy match {
       case TOPIC_NAME        => new SubjectNameStrategyAdapter(new TopicNameStrategy)
       case RECORD_NAME       => new SubjectNameStrategyAdapter(new RecordNameStrategy)
       case TOPIC_RECORD_NAME => new SubjectNameStrategyAdapter(new TopicRecordNameStrategy)
+      case TOPIC_NAME_BASE64 => new SubjectNameStrategyAdapter(new TopicNameBase64Strategy)
       case _                 => throw new IllegalArgumentException(s"Invalid strategy: $strategy")
     }
   }

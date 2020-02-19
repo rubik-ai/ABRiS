@@ -24,6 +24,8 @@ import org.apache.spark.sql.catalyst.expressions.{Expression, UnaryExpression}
 import org.apache.spark.sql.types.{BinaryType, DataType}
 import za.co.absa.abris.avro.format.SparkAvroConversions
 import za.co.absa.abris.avro.parsing.utils.AvroSchemaUtils
+import za.co.absa.abris.avro.read.confluent.SchemaManager
+import org.codehaus.jackson.JsonNode
 
 case class CatalystDataToAvro(
    child: Expression,
@@ -73,6 +75,22 @@ case class CatalystDataToAvro(
       registryConfig: Map[String,String],
       prependSchemaId: Boolean): Option[Int] = {
 
+    // Metis - Not registering schema in case the configuration asks to!
+    val isSchemaRegistrationDisabled: Boolean = registryConfig
+      .getOrElse(SchemaManager.PARAM_SCHEMA_REGISTRATION_DISABLED, "false").toBoolean
+
+    if (isSchemaRegistrationDisabled) {
+
+      if (!SchemaManager.isSchemaRegistryConfigured) {
+        SchemaManager.configureSchemaRegistry(registryConfig)
+      }
+
+      val topic = registryConfig(SchemaManager.PARAM_SCHEMA_REGISTRY_TOPIC)
+      val isKey = false
+      val subject = SchemaManager.getSubjectName(topic, isKey, schema, registryConfig)
+      val schemaId = SchemaManager.getLatestVersionId(subject)
+      return Some(schemaId)
+    }
     val schemaId = AvroSchemaUtils.registerSchema(schema, registryConfig)
 
     if (prependSchemaId) schemaId else None
