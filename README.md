@@ -45,7 +45,7 @@ The API consists of four Spark SQL expressions:
 * ```to_avro``` and ```from_avro``` used for normal Avro payload
 * ```to_confluent_avro``` and ```from_confluent_avro``` used for Confluent Avro data format
 
-Full runnable examples can be found in the ```za.co.absa.abris.examples``` package. You can also take a look at unit tests in package ```za.co.absa.abris.avro.sql```.
+Full runnable examples can be found in the ```ai.rubik.abris.examples``` package. You can also take a look at unit tests in package ```ai.rubik.abris.avro.sql```.
 
 ### Deprecation Note
 Old ABRiS API is deprecated, but is still included in the library. Documentation for old API is in [ABRiS 2.2.3.](https://github.com/AbsaOSS/ABRiS/tree/v2.2.3)
@@ -57,7 +57,7 @@ You can find more about Confluent and Schema Registry in [Confluent documentatio
 
 ### Reading Avro binary records with provided Avro schema    
 ```scala
-import za.co.absa.abris.avro.functions.from_avro
+import ai.rubik.abris.avro.functions.from_avro
 
 def readAvro(dataFrame: DataFrame, schemaString: String): DataFrame = {
 
@@ -82,7 +82,7 @@ val schemaRegistryConfig = Map(
 Depending on the selected naming strategy you may also need to provide ```SchemaManager.PARAM_SCHEMA_NAME_FOR_RECORD_STRATEGY``` and ```SchemaManager.PARAM_SCHEMA_NAMESPACE_FOR_RECORD_STRATEGY```
  
 ```scala
-import za.co.absa.abris.avro.functions.from_avro
+import ai.rubik.abris.avro.functions.from_avro
 
 def readAvro(dataFrame: DataFrame, schemaRegistryConfig: Map[String, String]): DataFrame = {
 
@@ -93,7 +93,7 @@ This example is similar to the previous one except for the fact that this time c
 
 ### Reading Confluent Avro binary records with provided Avro schema    
 ```scala
-import za.co.absa.abris.avro.functions.from_confluent_avro
+import ai.rubik.abris.avro.functions.from_confluent_avro
 
 def readAvro(dataFrame: DataFrame, schemaString: String): DataFrame = {
 
@@ -105,7 +105,7 @@ The main difference between ```from_confluent_avro``` and ```from_avro``` is in 
 ### Reading Confluent Avro binary records using schema registry
 Schema Registry configuration is the same as in previous Schema Registry example.
 ```scala
-import za.co.absa.abris.avro.functions.from_confluent_avro
+import ai.rubik.abris.avro.functions.from_confluent_avro
 
 def readAvro(dataFrame: DataFrame, schemaRegistryConfig: Map[String, String]): DataFrame = {
 
@@ -144,7 +144,7 @@ val valueRegistryConfig = commonRegistryConfig ++ Map(
 Let's assume that the Avro binary data for key are in the ```key``` column and the payload data are in the ```value``` column of the same DataFrame.
 
 ```scala
-import za.co.absa.abris.avro.functions.from_confluent_avro
+import ai.rubik.abris.avro.functions.from_confluent_avro
 
 val result: DataFrame  = dataFrame.select(
     from_confluent_avro(col("key"), keyRegistryConfig) as 'key,
@@ -154,7 +154,7 @@ We just need to use the right configuration for the right column and that's it.
 
 ### Writing Avro records 
 ```scala
-import za.co.absa.abris.avro.functions.to_avro
+import ai.rubik.abris.avro.functions.to_avro
 
 def writeAvro(dataFrame: DataFrame): DataFrame = {
 
@@ -168,7 +168,7 @@ If you want to serialize more than one column, you have to put them in a Spark *
 
 ### Writing Avro records with provided Avro schema 
 ```scala
-import za.co.absa.abris.avro.functions.to_avro
+import ai.rubik.abris.avro.functions.to_avro
 
 def writeAvro(dataFrame: DataFrame, schemaString: String): DataFrame = {
 
@@ -192,7 +192,7 @@ val schemaRegistryConfig = Map(
 In this example the ```TOPIC_RECORD_NAME``` naming strategy is used, therefore we need to provide topic, name and namespace.
 
 ```scala
-import za.co.absa.abris.avro.functions.to_avro
+import ai.rubik.abris.avro.functions.to_avro
 
 def writeAvro(dataFrame: DataFrame, schemaRegistryConfig: Map[String, String]): DataFrame = {
 
@@ -205,7 +205,7 @@ Since we didn't provide a schema it will be generated automatically and then sto
 ### Writing Avro records using schema registry and providing a schema
 The only difference from previous example is that we have one additional parameter for the schema.
 ```scala
-import za.co.absa.abris.avro.functions.to_avro
+import ai.rubik.abris.avro.functions.to_avro
 
 def writeAvro(dataFrame: DataFrame, schemaString: String, schemaRegistryConfig: Map[String, String]): DataFrame = {
 
@@ -217,7 +217,7 @@ def writeAvro(dataFrame: DataFrame, schemaString: String, schemaRegistryConfig: 
 ### Writing Confluent Avro binary records using Schema Registry
 Schema Registry configuration is the same as in previous examples.
 ```scala
-import za.co.absa.abris.avro.functions.to_confluent_avro
+import ai.rubik.abris.avro.functions.to_confluent_avro
 
 def writeAvro(dataFrame: DataFrame, schemaRegistryConfig: Map[String, String]): DataFrame = {
   
@@ -229,7 +229,7 @@ The main difference between ```from_confluent_avro``` and ```from_avro``` is in 
 
 ### Writing Confluent Avro binary records with provided avro schema    
 ```scala
-import za.co.absa.abris.avro.functions.to_confluent_avro
+import ai.rubik.abris.avro.functions.to_confluent_avro
 
 def writeAvro(dataFrame: DataFrame, schemaString: String, schemaRegistryConfig: Map[String, String]): DataFrame = {
 
@@ -302,7 +302,7 @@ from pyspark.sql import Column
 from pyspark.sql.column import *
 
 jvm_gateway = spark_context._gateway.jvm
-abris_avro  = jvm_gateway.za.co.absa.abris.avro
+abris_avro  = jvm_gateway.ai.rubik.abris.avro
 naming_strategy = getattr(getattr(abris_avro.read.confluent.SchemaManager, "SchemaStorageNamingStrategies$"), "MODULE$").TOPIC_NAME()        
 
 schema_registry_config_dict = {"schema.registry.url": schema_registry_url,
